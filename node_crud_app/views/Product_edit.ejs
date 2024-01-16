@@ -1,0 +1,94 @@
+<%- include('layout/header') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 mx-auto mt-4">
+             <div class="card shadow">
+                   <div class="card-header bg-success">
+                       <h3 class="text-light">Edit Product(<%= product.name %>)</h3>
+                   </div>
+                   <div class="card-body p-4">
+                         <form action="/product/updateProduct/<%= product._id %>" method="post" id="add-form" enctype="multipart/form-data">
+                              <div class="mb-3">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" value="<%= product.name %>" class="form-control form-control-lg" placeholder="Enter name" required/>
+                              </div>
+                              <div class="mb-3">
+                                <label for="order">Price</label>
+                                <input type="number" name="price" value="<%= product.price %>" class="form-control form-control-lg" placeholder="Enter price" required/>                      
+                              </div>
+                              <div class="mb-3">
+                                <label for="order">Quantity</label>
+                                <input type="number" name="quantity" value="<%= product.quantity %>" class="form-control form-control-lg" placeholder="Enter quantity" required/>                      
+                              </div>
+                              <!-- <div class="mb-3">
+                                <label for="image" class="form-label">Select Image</label>
+                                <input type="file" name="image" class="form-control form-control-lg" />
+                                <img src="/<%= product.image %>" width="100" class="img-thumbnail mt-1">
+                              </div> -->
+                              <div class="mb-3">
+                                <label for="image" class="form-label">Select Image</label>
+                                <input type="file" name="image" class="form-control form-control-lg" id="imageInput" />
+                                <div class="mt-2">
+                                    <!-- Old Image Preview -->
+                                    <label for="oldImage">Old Image</label>
+                                    <img src="/<%= product.image %>" width="100" class="img-thumbnail mt-1" id="oldImagePreview">
+                                </div>
+                                <div class="mt-2">
+                                    <!-- New Image Preview -->
+                                    <label for="newImage">New Image Preview</label>
+                                    <img src="#" alt="New Image Preview" width="100" class="img-thumbnail mt-1" id="newImagePreview" style="display: none;">
+                                </div>
+                            </div>
+                            <input type="hidden" name="old_image" value="<%= product.image %>"/>
+                              <div class="mb-3">
+                                <label for="category">Select Category:</label>
+        <select id="category" name="category" required>
+            <% categories.forEach(category => { %>
+                <option value="<%= category._id %>" <%= product.category._id.equals(category._id) ? 'selected' : '' %>><%= category.name %></option>
+            <% }) %>
+        </select>         
+                              </div>
+                              <div class="mb-3 d-grid">
+                                <input type="submit" name="submit" value="update category" class="btn btn-success btn-lg"/>
+                              </div>
+                         </form>
+                   </div>
+             </div>
+        </div>
+    </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      // Get references to the file input and image preview elements
+      var imageInput = document.getElementById("imageInput");
+      var oldImagePreview = document.getElementById("oldImagePreview");
+      var newImagePreview = document.getElementById("newImagePreview");
+  
+      // Add event listener to the file input
+      imageInput.addEventListener("change", function() {
+          // Check if a file is selected
+          if (imageInput.files && imageInput.files[0]) {
+              var reader = new FileReader();
+  
+              // Set the new image source to the selected file's data URL
+              reader.onload = function(e) {
+                  newImagePreview.src = e.target.result;
+              };
+  
+              // Read the selected file as a data URL
+              reader.readAsDataURL(imageInput.files[0]);
+  
+              // Show both the new and old image previews
+              newImagePreview.style.display = "block";
+              oldImagePreview.style.display = "block";
+          } else {
+              // Hide the new image preview and show the old one if no file is selected
+              newImagePreview.style.display = "none";
+              oldImagePreview.style.display = "block";
+          }
+      });
+  });
+  </script>
+<%- include('layout/footer') %>
+    
